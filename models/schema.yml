@@ -3,10 +3,55 @@ version: 2
 sources:
   - name: raw
     schema: gz_raw_data
+    description: Greenweez ham e-ticaret verilerinin bulunduğu ana BigQuery veri kümesi.
     tables:
       - name: sales
         identifier: raw_gz_sales
+        description: Günlük satış işlemleri ve sipariş kalemi detayları tablosu.
+        config:
+          loaded_at_field: "CAST(date_date AS TIMESTAMP)"
+          freshness:
+            warn_after: {count: 90, period: day}
+        columns:
+          - name: date_date
+            description: Siparişin gerçekleştiği tarih.
+          - name: orders_id
+            description: Sipariş kimlik numarası.
+            data_tests:
+              - not_null
+          - name: pdt_id
+            description: Ürün kimlik numarası (staging modelinde products_id olarak adlandırılır).
+            data_tests:
+              - not_null
+          - name: revenue
+            description: Satıştan elde edilen toplam gelir.
+          - name: quantity
+            description: Satın alınan ürün adedi.
+
       - name: product
         identifier: raw_gz_product
+        description: Ürün kataloğu ve satın alma maliyet bilgilerini içeren tablo.
+        columns:
+          - name: products_id
+            description: Ürün birincil anahtarı (Primary Key).
+            data_tests:
+              - unique
+              - not_null
+          - name: purchse_price
+            description: Ürünün satın alma maliyeti.
+
       - name: ship
         identifier: raw_gz_ship
+        description: Kargo, nakliye ve operasyonel maliyet verilerini içeren tablo.
+        columns:
+          - name: orders_id
+            description: Sipariş birincil anahtarı (Primary Key).
+            data_tests:
+              - unique
+              - not_null
+          - name: shipping_fee
+            description: Müşteriden alınan kargo ücreti.
+          - name: logcost
+            description: Lojistik ve depolama maliyeti.
+          - name: ship_cost
+            description: Kargo taşıma maliyeti.
