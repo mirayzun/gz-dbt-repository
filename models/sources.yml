@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: gz_raw_data
+    database: bubbly-cascade-338118  # GCP Proje ID'niz
+    schema: gz_raw_data             # BigQuery Dataset adınız
+    description: Greenweez ham verilerinin bulunduğu ana veri kümesi
+    tables:
+      - name: raw_gz_sales
+        description: Günlük satış ve sipariş verileri tablosu
+      - name: raw_gz_product
+        description: Ürün kataloğu ve satın alma maliyetleri tablosu
+      - name: raw_gz_ship
+        description: Kargo, nakliye ve paketleme maliyetleri tablosu
